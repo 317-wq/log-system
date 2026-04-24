@@ -6,6 +6,7 @@
     实现一些工具：
     1、获取当前时间
     2、判断文件资源是否存在
+    3、获取文件目录
     3、创建所需文件资源
 */
 
@@ -19,7 +20,7 @@ using std::endl;
 
 namespace ljt{
     // 工具
-    namespace unil{
+    namespace util{
         // 设置成静态函数，方便调用，不需要实例化对象
         class Data{
         public:
@@ -36,6 +37,15 @@ namespace ljt{
                 struct stat statbuf;
                 // stat可以跨平台，移植性好
                 return (stat(filepath.c_str(), &statbuf) == 0);
+            }
+
+            // 获取文件目录
+            static std::string getDir(const std::string &filepath){
+                size_t pos = filepath.find_last_of("/\\");
+                if (pos == std::string::npos){
+                    return "";
+                }
+                return filepath.substr(0, pos);
             }
 
             // 创建文件资源
