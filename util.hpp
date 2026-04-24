@@ -7,7 +7,7 @@
     1、获取当前时间
     2、判断文件资源是否存在
     3、获取文件目录
-    3、创建所需文件资源
+    4、创建所需文件资源
 */
 
 #include <iostream>
@@ -45,7 +45,7 @@ namespace ljt{
                 if (pos == std::string::npos){
                     return "";
                 }
-                return filepath.substr(0, pos);
+                return filepath.substr(0, pos + 1);
             }
 
             // 创建文件资源
