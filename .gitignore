@@ -40,3 +40,10 @@ test
 
 # debug information files
 *.dwo
+
+# CMake generated files and folders
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
