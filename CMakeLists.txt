@@ -32,3 +32,6 @@ target_link_libraries(test_console_sink log_sink)
 
 add_executable(test_log_file tests/test_log_file.cpp)
 target_link_libraries(test_log_file log_file)
+
+add_executable(test_file_sink tests/test_file_sink.cpp)
+target_link_libraries(test_file_sink log_sink)
