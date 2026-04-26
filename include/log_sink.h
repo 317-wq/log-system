@@ -20,4 +20,16 @@ public:
     void flush() override;
 };
 
+class FileSink : public LogSink {
+public:
+    explicit FileSink(const std::string& fileName);
+    ~FileSink() override;
+    void log(const std::string& msg) override;
+    void flush() override;
+
+private:
+    std::string m_fileName;
+    FILE* m_file;
+};
+
 }
