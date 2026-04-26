@@ -1,19 +1,14 @@
-#include "util.hpp"
-#include "level.hpp"
+#include "message.hpp"
+#include <iostream>
 
-int main(){
-    // cout << ljt::unil::Data::getNowTime() << endl;
-    // cout << ljt::unil::File::fileIsExist("./a/b/test.txt") << endl;
-    // cout << ljt::unil::File::fileIsExist("./c/d/test.txt") << endl;
-    // std::string path = "./build/test.log";
-    // cout << ljt::util::File::getDir(path) << endl;
-    // ljt::util::File::createDirSource(path);
-
-    // cout << ljt::LogLevel::toString(ljt::LogLevel::Value::DEBUG) << endl;
-    // cout << ljt::LogLevel::toString(ljt::LogLevel::Value::INFO) << endl;
-    // cout << ljt::LogLevel::toString(ljt::LogLevel::Value::WARN) << endl;
-    // cout << ljt::LogLevel::toString(ljt::LogLevel::Value::ERROR) << endl;
-    // cout << ljt::LogLevel::toString(ljt::LogLevel::Value::FATAL) << endl;
-    // cout << ljt::LogLevel::toString(ljt::LogLevel::Value::OFF) << endl;
+int main() {
+    ljt::LogMsg msg("test_logger", "test.cpp", 10, "hello world", ljt::LogLevel::Value::INFO);
+    std::cout << "Message created successfully\n";
+    std::cout << "Level: " << ljt::LogLevel::toString(msg._level) << "\n";
+    std::cout << "Name: " << msg._name << "\n";
+    std::cout << "File: " << msg._file << "\n";
+    std::cout << "Line: " << msg._line << "\n";
+    std::cout << "Payload: " << msg._payload << "\n";
+    std::cout << "All tests passed!" << std::endl;
     return 0;
 }
