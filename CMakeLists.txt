@@ -13,6 +13,7 @@ target_link_libraries(log_event utils log_level)
 add_library(log_formatter src/log_formatter.cpp)
 target_link_libraries(log_formatter log_event)
 add_library(log_sink src/log_sink.cpp)
+add_library(log_file src/log_file.cpp)
 
 add_executable(test_utils tests/test_utils.cpp)
 target_link_libraries(test_utils utils)
@@ -28,3 +29,6 @@ target_link_libraries(test_log_formatter log_formatter)
 
 add_executable(test_console_sink tests/test_console_sink.cpp)
 target_link_libraries(test_console_sink log_sink)
+
+add_executable(test_log_file tests/test_log_file.cpp)
+target_link_libraries(test_log_file log_file)
