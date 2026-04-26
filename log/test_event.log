@@ -1,0 +1,14 @@
+Level: INFO
+File: /home/ljt/ljt/LOG/tests/test_log_event.cpp
+Line: 19
+Message: Hello, Log!
+Time: 2026-04-26 19:56:54
+ThreadID: 3828809265196755115
+====================
+Level: INFO
+File: /home/ljt/ljt/LOG/tests/test_log_event.cpp
+Line: 19
+Message: Hello, Log!
+Time: 2026-04-26 19:58:11
+ThreadID: 4448877483980289553
+====================
