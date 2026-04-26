@@ -1,7 +1,4 @@
 #pragma once
-#ifndef LOG_LEVEL_H
-#define LOG_LEVEL_H
-
 #include <string>
 #include <iostream>
 
@@ -36,4 +33,3 @@ namespace ljt{
         }
     };
 }
-#endif
