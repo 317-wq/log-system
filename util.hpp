@@ -1,6 +1,4 @@
 #pragma once
-#ifndef LOG_UTIL_H
-#define LOG_UTIL_H
 
 /*
     实现一些工具：
@@ -75,4 +73,3 @@ namespace ljt{
 
     }
 }
-#endif
