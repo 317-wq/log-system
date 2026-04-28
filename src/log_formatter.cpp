@@ -8,13 +8,12 @@
 namespace ljt {
 
     LogFormatter::LogFormatter(const LogEvent::ptr &event)
-        : _event(event)
-    {
+        : _event(event) {
     }
 
     // 格式化 -> 硬编码
     // [INFO][时间][线程号][文件路径][行号] "message"
-    const std::string LogFormatter::format() {
+    std::string LogFormatter::format() {
         std::string str;
 
         // FATAL等级 输出红色信息

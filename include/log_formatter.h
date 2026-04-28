@@ -14,7 +14,7 @@ namespace ljt {
 
         // 格式化 -> 硬编码
         // [INFO][时间][线程号][文件路径][行号] "message"
-        const std::string format();
+        std::string format();
 
     private:
         LogEvent::ptr _event;

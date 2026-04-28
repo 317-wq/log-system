@@ -53,6 +53,22 @@ namespace ljt {
     }
 
     void RollSinkBySize::log(const std::string &msg) {
+        // 如果单条消息就超过maxsize，直接写入当前文件
+        // 不管它，继续写入，这样至少能写入
+        if (msg.size() > _maxsize) {
+            if (!_ofs.is_open()) {
+                std::string filename = _basename + "-" + std::to_string(_id);
+                openFile(_ofs, filename);
+            }
+            _ofs.write(msg.c_str(), msg.size());
+            _ofs.flush();
+            _cur_size += msg.size();
+            if (_ofs.good() == false) {
+                throw std::runtime_error("RollSinkBySize write failed");
+            }
+            return;
+        }
+
         // 检查是否需要切换文件
         if (_cur_size + msg.size() > _maxsize) {
             // 关闭当前文件
@@ -79,11 +95,5 @@ namespace ljt {
         if (_ofs.good() == false) {
             throw std::runtime_error("RollSinkBySize write failed");
         }
-    }
-
-    // 简单工厂，基类指针指向派生类对象
-    template<typename SinkType, typename ...Args>
-    LogSink::ptr getSink(Args&& ...args){
-        return std::make_shared<SinkType>(std::forward<Args>(args)...); // 完美转发，保持性质
     }
 }

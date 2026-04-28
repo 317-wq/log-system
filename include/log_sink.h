@@ -68,9 +68,12 @@ namespace ljt {
     // 我们不可能让他去改源代码的，因此，我们这边提供一个简单工厂模式
     // 支持用户自己在外面继承一个基类来用
     class SinkFactory{
+    public:
         // 不同的sink的参数数量不同，需要传递可变参数包，编译器自己选择应该用什么Sink，重载
         // ...args：声明参数包  args...：展开参数包
         template<typename SinkType, typename ...Args>
-        static LogSink::ptr getSink(Args&& ...args);
+        static LogSink::ptr getSink(Args&& ...args) {
+            return std::make_shared<SinkType>(std::forward<Args>(args)...); // 完美转发，保持性质
+        }
     };
 }
