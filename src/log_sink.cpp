@@ -1,50 +1,89 @@
-#include "log_sink.h"
-#include <cstdio>
+#include "../include/log_sink.h"
+#include <memory>
+#include <stdexcept>
+#include <string>
 
 namespace ljt {
+    // 基类的静态函数实现
+    void LogSink::openFile(std::ofstream& ofs, const std::string &filepath) {
+        try {
+            Utils::createFileDir(filepath);
+        } catch (const std::runtime_error& e) {
+            std::cout << e.what() << std::endl;
+        }
 
-ConsoleSink::ConsoleSink() {
-    // 构造控制台输出
-}
-
-void ConsoleSink::log(const std::string& msg) {
-    // 输出日志到控制台
-    fprintf(stdout, "%s\n", msg.c_str());
-}
-
-void ConsoleSink::flush() {
-    // 刷新控制台缓冲区
-    fflush(stdout);
-}
-
-FileSink::FileSink(const std::string& fileName)
-    : m_fileName(fileName) {
-    // 打开文件，以追加模式写入
-    m_file = fopen(fileName.c_str(), "a");
-    if (!m_file) {
-        m_file = stdout; // 如果打开失败，输出到控制台
+        ofs.open(filepath, std::ios::app);
+        if (!ofs.is_open()) {
+            throw std::runtime_error("Failed to open file: " + filepath);
+        }
     }
-}
 
-FileSink::~FileSink() {
-    // 关闭文件
-    if (m_file && m_file != stdout) {
-        fclose(m_file);
+    // 控制台输出子类的实现
+    void ConsoleSink::log(const std::string &msg) {
+        std::cout.write(msg.c_str(), msg.size());
     }
-}
 
-void FileSink::log(const std::string& msg) {
-    // 输出日志到文件
-    if (m_file) {
-        fprintf(m_file, "%s\n", msg.c_str());
+    // 输出到单文件子类的实现
+    FileSink::FileSink(const std::string &filepath)
+        : _filepath(filepath) {
+        openFile(_ofs, filepath);
     }
-}
 
-void FileSink::flush() {
-    // 刷新文件缓冲区
-    if (m_file) {
-        fflush(m_file);
+    FileSink::~FileSink() {
+        _ofs.flush();
+        _ofs.close();
     }
-}
 
+    void FileSink::log(const std::string &msg) {
+        _ofs.write(msg.c_str(), msg.size());
+        _ofs.flush();
+        if (_ofs.good() == false) {
+            throw std::runtime_error("File write failed: " + _filepath);
+        }
+    }
+
+    // 文件滚动更新策略
+    RollSinkBySize::RollSinkBySize(const std::string &basename, size_t maxsize)
+        : _basename(basename), _maxsize(maxsize), _id(1), _cur_size(0) {
+    }
+
+    RollSinkBySize::~RollSinkBySize() {
+        _ofs.flush();
+        _ofs.close();
+    }
+
+    void RollSinkBySize::log(const std::string &msg) {
+        // 检查是否需要切换文件
+        if (_cur_size + msg.size() > _maxsize) {
+            // 关闭当前文件
+            if (_ofs.is_open()) {
+                _ofs.flush();
+                _ofs.close();
+            }
+            // 切换到下一个文件
+            _id++;
+            _cur_size = 0;
+        }
+
+        // 如果文件未打开，则打开新文件
+        if (!_ofs.is_open()) {
+            std::string filename = _basename + "-" + std::to_string(_id);
+            openFile(_ofs, filename);
+        }
+
+        // 写入数据
+        _ofs.write(msg.c_str(), msg.size());
+        _ofs.flush();
+        _cur_size += msg.size();
+
+        if (_ofs.good() == false) {
+            throw std::runtime_error("RollSinkBySize write failed");
+        }
+    }
+
+    // 简单工厂，基类指针指向派生类对象
+    template<typename SinkType, typename ...Args>
+    LogSink::ptr getSink(Args&& ...args){
+        return std::make_shared<SinkType>(std::forward<Args>(args)...); // 完美转发，保持性质
+    }
 }
