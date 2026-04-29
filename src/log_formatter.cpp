@@ -60,6 +60,7 @@ namespace ljt {
         str += " ";
         str += _event->getMessage();
         str += "\033[0m";
+        str += "\n";
 
         return str;
     }

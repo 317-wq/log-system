@@ -10,6 +10,7 @@
 namespace ljt {
     class LogFormatter {
     public:
+        using ptr = std::shared_ptr<LogFormatter>;
         LogFormatter(const LogEvent::ptr &event);
 
         // 格式化 -> 硬编码

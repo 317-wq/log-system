@@ -1,5 +1,4 @@
 #include "../include/log_sink.h"
-#include <memory>
 #include <stdexcept>
 #include <string>
 
