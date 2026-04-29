@@ -23,11 +23,3 @@ add_library(log STATIC ${SOURCES})
 
 # 链接线程库
 target_link_libraries(log pthread)
-
-# 可选：构建测试程序
-option(BUILD_TEST "Build test program" ON)
-
-if(BUILD_TEST)
-    add_executable(test_log_sink test_log_sink.cpp)
-    target_link_libraries(test_log_sink log pthread)
-endif()
